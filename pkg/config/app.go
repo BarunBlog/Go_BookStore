@@ -1,11 +1,16 @@
 package config
 
-import "database/sql"
+import (
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+)
 
-var db *sql.DB
+var (
+	db *gorm.DB
+)
 
 func Connect() {
-	d, err := sql.Open("mysql", "username:password@tcp(127.0.0.1:3306)/test")
+	d, err := gorm.Open("mysql", "root:@tcp(127.0.0.1:3306)/go_test_db?charset=utf8&parseTime=True&loc=Local")
 
 	// if there is an error opening the connection, handle it
 	if err != nil {
@@ -14,11 +19,8 @@ func Connect() {
 
 	db = d
 
-	// defer the close till after the main function has finished
-	// executing
-	defer d.Close()
 }
 
-func GetDb() *sql.DB {
+func GetDb() *gorm.DB {
 	return db
 }
